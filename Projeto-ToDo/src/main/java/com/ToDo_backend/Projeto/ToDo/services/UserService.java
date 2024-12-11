@@ -3,6 +3,7 @@ package com.ToDo_backend.Projeto.ToDo.services;
 import com.ToDo_backend.Projeto.ToDo.models.UserModel;
 import com.ToDo_backend.Projeto.ToDo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,13 +12,11 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public void RegisterUser(String email, String password){
-        if(repository.existsByEmail(email)){
+    public UserModel RegisterUser(UserModel userModel){
+        if(repository.existsByEmail(userModel.getEmail())){
             throw new IllegalArgumentException("Email já existe");
         }
-        UserModel user = new UserModel();
-        user.setEmail(email);
-        user.setPassword(password);
-        repository.save(user);
+       userModel.setPassword(new BCryptPasswordEncoder().encode(userModel.getPassword()));
+        return repository.save(userModel);
     }
 }

@@ -1,7 +1,9 @@
 package com.ToDo_backend.Projeto.ToDo.models;
 
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
@@ -48,5 +50,9 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserDTO toDTO(){
+       return new UserDTO(this.email, this.password);
     }
 }

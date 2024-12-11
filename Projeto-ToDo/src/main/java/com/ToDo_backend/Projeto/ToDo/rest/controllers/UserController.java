@@ -1,7 +1,9 @@
 package com.ToDo_backend.Projeto.ToDo.rest.controllers;
 
+import com.ToDo_backend.Projeto.ToDo.models.UserModel;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
 import com.ToDo_backend.Projeto.ToDo.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +20,8 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO){
-        service.RegisterUser(userDTO.email(), userDTO.password());
+    public ResponseEntity<String> createUser(@RequestBody @Valid UserDTO userDTO){
+        service.RegisterUser(userDTO.toModel());
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuário cadastrado com sucesso!");
     }
 }
