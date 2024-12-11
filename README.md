@@ -1,0 +1,1 @@
+Este repositório contém o backend do projeto ToDoList, responsável por gerenciar as funcionalidades da API. Desenvolvido com foco em boas práticas, ele é parte de um projeto colaborativo para simular o ambiente real de desenvolvimento. As tarefas e o progresso são organizados no Trello para uma melhor experiência de trabalho em equipe.
