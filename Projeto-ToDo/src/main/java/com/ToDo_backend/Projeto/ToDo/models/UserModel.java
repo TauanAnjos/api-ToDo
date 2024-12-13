@@ -2,8 +2,7 @@ package com.ToDo_backend.Projeto.ToDo.models;
 
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
 import jakarta.persistence.*;
-import lombok.*;
-import org.modelmapper.ModelMapper;
+
 
 import java.util.UUID;
 
@@ -14,6 +13,10 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID user_id;
+    @Column(name = "firstName")
+    private String firstName;
+    @Column(name = "lastName")
+    private String lastName;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "password", nullable = false)
@@ -22,10 +25,28 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(UUID user_id, String email, String password) {
+    public UserModel(UUID user_id,String firstName,String lastName, String email, String password) {
         this.user_id = user_id;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public UUID getUser_id() {
@@ -53,6 +74,6 @@ public class UserModel {
     }
 
     public UserDTO toDTO(){
-       return new UserDTO(this.email, this.password);
+       return new UserDTO(this.firstName, this.lastName, this.email, this.password);
     }
 }

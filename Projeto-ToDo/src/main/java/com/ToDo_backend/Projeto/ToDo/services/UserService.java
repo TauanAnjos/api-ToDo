@@ -1,5 +1,6 @@
 package com.ToDo_backend.Projeto.ToDo.services;
 
+import com.ToDo_backend.Projeto.ToDo.exception.BusinessRuleException;
 import com.ToDo_backend.Projeto.ToDo.models.UserModel;
 import com.ToDo_backend.Projeto.ToDo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class UserService {
 
     public UserModel RegisterUser(UserModel userModel){
         if(repository.existsByEmail(userModel.getEmail())){
-            throw new IllegalArgumentException("Email já existe");
+            throw new BusinessRuleException("Email já existe");
         }
        userModel.setPassword(new BCryptPasswordEncoder().encode(userModel.getPassword()));
         return repository.save(userModel);

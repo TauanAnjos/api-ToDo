@@ -1,5 +1,6 @@
 package com.ToDo_backend.Projeto.ToDo.services;
 
+import com.ToDo_backend.Projeto.ToDo.exception.BusinessRuleException;
 import com.ToDo_backend.Projeto.ToDo.models.UserModel;
 import com.ToDo_backend.Projeto.ToDo.repositories.UserRepository;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
@@ -14,9 +15,9 @@ public class AuthService {
     private UserRepository repository;
 
     public UserDTO authentication(UserDTO userDTO){
-        UserModel userAuth = repository.findByEmail(userDTO.email()).orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+        UserModel userAuth = repository.findByEmail(userDTO.email()).orElseThrow(() -> new BusinessRuleException("Usuário não encontrado."));
         if(!new BCryptPasswordEncoder().matches(userDTO.password(), userAuth.getPassword())){
-            throw new IllegalArgumentException("Senha inválida.");
+            throw new BusinessRuleException("Senha inválida.");
         }
         return userAuth.toDTO();
     }
