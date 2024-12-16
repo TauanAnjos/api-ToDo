@@ -22,7 +22,7 @@ public class UserModel {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @OneToMany(fetch = FetchType.LAZY)//Para carregar tarefas apenas quando necessário, otimizando o desempenho.
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)//Para carregar tarefas apenas quando necessário, otimizando o desempenho.
     private List<TaskModel> tasks;
 
     public UserModel() {

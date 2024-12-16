@@ -1,7 +1,10 @@
 package com.ToDo_backend.Projeto.ToDo.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -15,6 +18,10 @@ public class TaskModel {
     private String title;
     @Column(name = "description", length = 255, nullable = false)
     private String description;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
     @ManyToOne(fetch = FetchType.LAZY) //Para carregar o usuário associado somente quando necessário.
     private UserModel user;
 
@@ -50,6 +57,22 @@ public class TaskModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public UserModel getUser() {
