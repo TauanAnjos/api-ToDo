@@ -4,6 +4,7 @@ import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
 import jakarta.persistence.*;
 
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +22,8 @@ public class UserModel {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
+    @OneToMany(fetch = FetchType.LAZY)//Para carregar tarefas apenas quando necessário, otimizando o desempenho.
+    private List<TaskModel> tasks;
 
     public UserModel() {
     }
@@ -71,6 +74,14 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<TaskModel> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskModel> tasks) {
+        this.tasks = tasks;
     }
 
     public UserDTO toDTO(){
