@@ -1,5 +1,6 @@
 package com.ToDo_backend.Projeto.ToDo.models;
 
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -28,10 +29,12 @@ public class TaskModel {
     public TaskModel() {
     }
 
-    public TaskModel(UUID task_id, String title, String description, UserModel user) {
+    public TaskModel(UUID task_id, String title, String description, LocalDateTime createdDate, LocalDateTime lastModifiedDate, UserModel user) {
         this.task_id = task_id;
         this.title = title;
         this.description = description;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
         this.user = user;
     }
 
@@ -81,5 +84,8 @@ public class TaskModel {
 
     public void setUser(UserModel user) {
         this.user = user;
+    }
+    public TaskDTO toDTO(){
+        return new TaskDTO(this.task_id ,this.title, this.description,this.createdDate,this.lastModifiedDate, this.user);
     }
 }
