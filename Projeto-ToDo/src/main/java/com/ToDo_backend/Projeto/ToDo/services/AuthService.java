@@ -14,9 +14,9 @@ public class AuthService {
     @Autowired
     private UserRepository repository;
 
-    public UserDTO authentication(UserDTO userDTO){
-        UserModel userAuth = repository.findByEmail(userDTO.email()).orElseThrow(() -> new BusinessRuleException("Usuário não encontrado."));
-        if(!new BCryptPasswordEncoder().matches(userDTO.password(), userAuth.getPassword())){
+    public UserDTO authentication(String email, String password){
+        UserModel userAuth = repository.findByEmail(email).orElseThrow(() -> new BusinessRuleException("Usuário não encontrado."));
+        if(!new BCryptPasswordEncoder().matches(password, userAuth.getPassword())){
             throw new BusinessRuleException("Senha inválida.");
         }
         return userAuth.toDTO();

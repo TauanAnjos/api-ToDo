@@ -6,13 +6,11 @@ import com.ToDo_backend.Projeto.ToDo.models.UserModel;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record TaskDTO(UUID id,
-                      String title,
+public record TaskDTO(String title,
                       String description,
-                      LocalDateTime createdDate,
-                      LocalDateTime lastModifiedDate,
+
                       UserModel user) {
     public TaskModel toModel(){
-        return new TaskModel(this.id ,this.title, this.description,this.createdDate,this.lastModifiedDate, this.user);
+        return new TaskModel(this.title, this.description, this.user);
     }
 }

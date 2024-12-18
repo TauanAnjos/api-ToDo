@@ -1,6 +1,7 @@
 package com.ToDo_backend.Projeto.ToDo.models;
 
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 
@@ -23,6 +24,7 @@ public class UserModel {
     @Column(name = "password", nullable = false)
     private String password;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)//Para carregar tarefas apenas quando necessário, otimizando o desempenho.
+    @JsonIgnoreProperties("user")
     private List<TaskModel> tasks;
 
     public UserModel() {

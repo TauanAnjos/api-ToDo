@@ -1,5 +1,6 @@
 package com.ToDo_backend.Projeto.ToDo.rest.controllers;
 
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.AuthDTO;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
 import com.ToDo_backend.Projeto.ToDo.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class AuthController {
     private AuthService service;
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO){
-        service.authentication(userDTO);
+    public ResponseEntity<String> login(@RequestBody AuthDTO authDTO){
+        service.authentication(authDTO.email(), authDTO.password());
         return ResponseEntity.status(HttpStatus.OK).body("Usuário logado com sucesso.");
     }
 }
