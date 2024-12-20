@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 
-public record UserDTO(
+public record UserDTORequest(
         String firstName,
         String lastName,
         @NotBlank(message = "Email é obrigatório.") @Email(message = "Digite um email válido.") String email,

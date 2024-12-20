@@ -5,7 +5,8 @@ import com.ToDo_backend.Projeto.ToDo.models.TaskModel;
 import com.ToDo_backend.Projeto.ToDo.models.UserModel;
 import com.ToDo_backend.Projeto.ToDo.repositories.TaskRepository;
 import com.ToDo_backend.Projeto.ToDo.repositories.UserRepository;
-import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTO;
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTORequest;
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTOResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,28 +24,28 @@ public class TaskService {
     private  UserRepository userRepository;
 
     @Transactional
-    public TaskDTO createTask(UUID userId, TaskModel taskModel){
+    public TaskDTOResponse createTask(UUID userId, TaskDTORequest taskDTORequest){
         UserModel userExists = userRepository.findById(userId).orElseThrow(() ->
                 new BusinessRuleException("Usuário não encontrado."));
-        taskModel.setUser(userExists);
+        TaskModel taskModel = new TaskModel(taskDTORequest.title(), taskDTORequest.description(), userExists);
         taskRepository.saveAndFlush(taskModel);
         return taskModel.toDTO();
     }
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAllTasks(){
+    public List<TaskDTOResponse> getAllTasks(){
         List<TaskModel> listTasks = taskRepository.findAll();
         return listTasks.stream().map(task -> task.toDTO()).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public TaskDTO taskFindById(UUID taskId){
+    public TaskDTOResponse taskFindById(UUID taskId){
         TaskModel taskExist = taskRepository.findById(taskId).orElseThrow(()->
                 new BusinessRuleException("ID de tarefa não encontrado."));
         return taskExist.toDTO();
     }
 
     @Transactional
-    public TaskDTO updateTask(UUID taskId, TaskModel taskModel){
+    public TaskDTOResponse updateTask(UUID taskId, TaskModel taskModel){
         TaskModel taskExist = taskRepository.findById(taskId).orElseThrow(()->
                 new BusinessRuleException("ID de tarefa não encontrado."));
         if (taskModel.getTitle() != null && !taskModel.getTitle().isEmpty()){

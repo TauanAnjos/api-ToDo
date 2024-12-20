@@ -1,6 +1,7 @@
 package com.ToDo_backend.Projeto.ToDo.models;
 
-import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTO;
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTOResponse;
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTOResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,7 +25,7 @@ public class TaskModel {
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
-    @ManyToOne(fetch = FetchType.LAZY) //Para carregar o usuário associado somente quando necessário.
+    @ManyToOne //Para carregar o usuário associado somente quando necessário.
     @JsonIgnoreProperties("tasks")
     private UserModel user;
 
@@ -68,7 +69,8 @@ public class TaskModel {
     public void setUser(UserModel user) {
         this.user = user;
     }
-    public TaskDTO toDTO(){
-        return new TaskDTO(this.title, this.description, this.user);
+    public TaskDTOResponse toDTO(){
+        UserDTOResponse userDTO = new UserDTOResponse(this.user.getFirstName(), this.user.getLastName(), this.user.getEmail());
+        return new TaskDTOResponse(this.title, this.description, userDTO);
     }
 }

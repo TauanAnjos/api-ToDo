@@ -1,6 +1,6 @@
 package com.ToDo_backend.Projeto.ToDo.models;
 
-import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTO;
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTORequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -86,7 +86,7 @@ public class UserModel {
         this.tasks = tasks;
     }
 
-    public UserDTO toDTO(){
-       return new UserDTO(this.firstName, this.lastName, this.email, this.password);
+    public UserDTORequest toDTO(){
+       return new UserDTORequest(this.firstName, this.lastName, this.email, this.password);
     }
 }
