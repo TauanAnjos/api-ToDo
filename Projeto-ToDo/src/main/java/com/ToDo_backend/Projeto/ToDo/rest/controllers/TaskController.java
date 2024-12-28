@@ -5,6 +5,7 @@ import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTORequest;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTOResponse;
 import com.ToDo_backend.Projeto.ToDo.services.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/task")
-public class TaskController {
+public class TaskController extends BaseController{
 
     @Autowired
     private TaskService taskService;
@@ -25,9 +26,9 @@ public class TaskController {
             description = "Endpoint de criação de tarefa.",
             tags = "task"
     )
-    @PostMapping("/{id}")
-    public ResponseEntity<TaskDTOResponse> createdTask(@PathVariable("id")UUID userId, @RequestBody TaskDTORequest taskDTORequest){
-        TaskDTOResponse createdTask = taskService.createTask(userId, taskDTORequest);
+    @PostMapping
+    public ResponseEntity<TaskDTOResponse> createdTask(HttpServletRequest request,  @RequestBody TaskDTORequest taskDTORequest){
+        TaskDTOResponse createdTask = taskService.createTask(getUserModelSession(request).getUser_id(), taskDTORequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
     @Operation(
@@ -36,7 +37,8 @@ public class TaskController {
             tags = "task"
     )
     @GetMapping
-    public ResponseEntity<List<TaskDTOResponse>> getAllTasks(){
-        return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasks());
+    public ResponseEntity<List<TaskDTOResponse>> getAllTasks(HttpServletRequest request){
+        UUID uuid = getUserModelSession(request).getUser_id();
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasks(uuid));
     }
 }

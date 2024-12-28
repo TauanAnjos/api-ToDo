@@ -7,6 +7,7 @@ import com.ToDo_backend.Projeto.ToDo.repositories.TaskRepository;
 import com.ToDo_backend.Projeto.ToDo.repositories.UserRepository;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTORequest;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTOResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +33,9 @@ public class TaskService {
         return taskModel.toDTO();
     }
     @Transactional(readOnly = true)
-    public List<TaskDTOResponse> getAllTasks(){
-        List<TaskModel> listTasks = taskRepository.findAll();
+    public List<TaskDTOResponse> getAllTasks(UUID userId){
+
+        List<TaskModel> listTasks = taskRepository.findAllByUserId(userId).orElseThrow(()-> new BusinessRuleException("Tarefas não encontradas"));
         return listTasks.stream().map(task -> task.toDTO()).collect(Collectors.toList());
     }
 
