@@ -22,9 +22,9 @@ public class TaskController extends BaseController{
     private TaskService taskService;
 
     @Operation(
-            summary = "Criar tarefa",
-            description = "Endpoint de criação de tarefa.",
-            tags = "task"
+            summary = "Criar uma nova tarefa",
+            description = "Endpoint para criar uma nova tarefa associada ao usuário autenticado.",
+            tags = {"Tarefas"}
     )
     @PostMapping
     public ResponseEntity<TaskDTOResponse> createdTask(HttpServletRequest request,  @RequestBody TaskDTORequest taskDTORequest){
@@ -32,13 +32,23 @@ public class TaskController extends BaseController{
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
     @Operation(
-            summary = "Buscar todas as tarefas",
-            description = "Endpoint para buscar todas as tarefas no banco",
-            tags = "task"
+            summary = "Listar todas as tarefas do usuário",
+            description = "Endpoint para consultar todas as tarefas cadastradas no sistema, associadas ao usuário autenticado.",
+            tags = {"Tarefas"}
     )
     @GetMapping
     public ResponseEntity<List<TaskDTOResponse>> getAllTasks(HttpServletRequest request){
         UUID uuid = getUserModelSession(request).getUser_id();
         return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasks(uuid));
+    }
+    @Operation(
+            summary = "Consultar tarefa por ID",
+            description = "Endpoint para buscar uma tarefa específica no sistema pelo seu identificador único (ID). Retorna os detalhes da tarefa somente se ela pertencer ao usuário autenticado.",
+            tags = {"Tarefas"}
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDTOResponse> findByTaskById(@PathVariable("id") UUID idTask, HttpServletRequest request){
+        UUID idUser = getUserModelSession(request).getUser_id();
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.taskFindById(idTask, idUser));
     }
 }

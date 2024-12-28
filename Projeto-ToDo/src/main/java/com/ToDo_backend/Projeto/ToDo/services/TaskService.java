@@ -40,9 +40,12 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public TaskDTOResponse taskFindById(UUID taskId){
+    public TaskDTOResponse taskFindById(UUID taskId, UUID idUser){
         TaskModel taskExist = taskRepository.findById(taskId).orElseThrow(()->
                 new BusinessRuleException("ID de tarefa não encontrado."));
+        if (!taskExist.getUser().getUser_id().equals(idUser)){
+            throw new BusinessRuleException("Essa tarefa não pertence ao usuário.");
+        }
         return taskExist.toDTO();
     }
 
