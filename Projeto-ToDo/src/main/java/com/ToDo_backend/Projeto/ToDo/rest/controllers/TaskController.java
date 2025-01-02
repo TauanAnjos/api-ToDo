@@ -46,9 +46,20 @@ public class TaskController extends BaseController{
             description = "Endpoint para buscar uma tarefa específica no sistema pelo seu identificador único (ID). Retorna os detalhes da tarefa somente se ela pertencer ao usuário autenticado.",
             tags = {"Tarefas"}
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<TaskDTOResponse> findByTaskById(@PathVariable("id") UUID idTask, HttpServletRequest request){
+    @GetMapping("/{taskId}")
+    public ResponseEntity<TaskDTOResponse> findByTaskById(@PathVariable("taskId") UUID idTask, HttpServletRequest request){
         UUID idUser = getUserModelSession(request).getUser_id();
         return ResponseEntity.status(HttpStatus.OK).body(taskService.taskFindById(idTask, idUser));
+    }
+    @Operation(
+            summary = "Atualizar tarefa",
+            description = "Endpoint para atualizar os dados de uma tarefa específica associada ao usuário autenticado. Permite alterar o título e a descrição da tarefa, desde que preenchidos corretamente.",
+            tags = {"Tarefas"}
+    )
+
+    @PutMapping("/{taskId}")
+    public ResponseEntity<TaskDTOResponse> taskUpdade(@PathVariable("taskId") UUID idTask,HttpServletRequest request, @RequestBody TaskDTORequest taskDTORequest){
+        UUID idUser = getUserModelSession(request).getUser_id();
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.updateTask(idUser, idTask, taskDTORequest));
     }
 }

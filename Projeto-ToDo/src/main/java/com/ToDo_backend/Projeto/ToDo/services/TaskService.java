@@ -50,16 +50,19 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDTOResponse updateTask(UUID taskId, TaskModel taskModel){
+    public TaskDTOResponse updateTask(UUID userId ,UUID taskId, TaskDTORequest taskDTORequest){
         TaskModel taskExist = taskRepository.findById(taskId).orElseThrow(()->
                 new BusinessRuleException("ID de tarefa não encontrado."));
-        if (taskModel.getTitle() != null && !taskModel.getTitle().isEmpty()){
-            taskExist.setTitle(taskModel.getTitle());
+        if (!taskExist.getUser().getUser_id().equals(userId)){
+            throw new BusinessRuleException("Essa tarefa não pertence ao usuário.");
+        }
+        if (taskDTORequest.title() != null && !taskDTORequest.title().isEmpty()){
+            taskExist.setTitle(taskDTORequest.title());
         }else {
             throw new BusinessRuleException("O titulo precisa ser preenchido.");
         }
-        if(taskModel.getDescription() != null && !taskModel.getDescription().isEmpty()){
-            taskExist.setDescription(taskModel.getDescription());
+        if(taskDTORequest.description() != null && !taskDTORequest.description().isEmpty()){
+            taskExist.setDescription(taskDTORequest.description());
         }else {
             throw new BusinessRuleException("Preencha a descrição.");
         }
