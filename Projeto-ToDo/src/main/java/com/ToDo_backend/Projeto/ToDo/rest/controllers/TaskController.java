@@ -56,10 +56,20 @@ public class TaskController extends BaseController{
             description = "Endpoint para atualizar os dados de uma tarefa específica associada ao usuário autenticado. Permite alterar o título e a descrição da tarefa, desde que preenchidos corretamente.",
             tags = {"Tarefas"}
     )
-
     @PutMapping("/{taskId}")
-    public ResponseEntity<TaskDTOResponse> taskUpdade(@PathVariable("taskId") UUID idTask,HttpServletRequest request, @RequestBody TaskDTORequest taskDTORequest){
+    public ResponseEntity<TaskDTOResponse> updateTask(@PathVariable("taskId") UUID idTask,HttpServletRequest request, @RequestBody TaskDTORequest taskDTORequest){
         UUID idUser = getUserModelSession(request).getUser_id();
         return ResponseEntity.status(HttpStatus.OK).body(taskService.updateTask(idUser, idTask, taskDTORequest));
+    }
+    @Operation(
+            summary = "Excluir tarefa",
+            description = "Endpoint para excluir uma tarefa específica associada ao usuário autenticado. Permite a remoção definitiva da tarefa com base em seu identificador.",
+            tags = {"Tarefas"}
+    )
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<String> deleteTask(@PathVariable("taskId")UUID taskId, HttpServletRequest request){
+        UUID userId = getUserModelSession(request).getUser_id();
+        taskService.deleteTask(taskId, userId);
+        return ResponseEntity.status(HttpStatus.OK).body("Tarefa excluida com sucesso.");
     }
 }

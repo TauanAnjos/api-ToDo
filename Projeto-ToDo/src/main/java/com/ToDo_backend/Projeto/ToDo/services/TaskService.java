@@ -71,9 +71,13 @@ public class TaskService {
     }
 
     @Transactional
-    public void deleteTask(UUID taskId){
+    public void deleteTask(UUID taskId, UUID userId){
         if(!taskRepository.existsById(taskId)){
             throw new BusinessRuleException("ID de tarefa não encontrado.");
+        }
+        TaskModel taskExist = taskRepository.findById(taskId).orElseThrow(()-> new BusinessRuleException("ID de tarefa não encontrado."));
+        if (!taskExist.getUser().getUser_id().equals(userId)){
+            throw new BusinessRuleException("Essa tarefa não pertence ao usuário.");
         }
         taskRepository.deleteById(taskId);
     }
