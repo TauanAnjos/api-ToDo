@@ -2,6 +2,7 @@ package com.ToDo_backend.Projeto.ToDo.rest.controllers;
 
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTORequest;
 import com.ToDo_backend.Projeto.ToDo.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,12 @@ public class UserController extends BaseController{
 
     @Autowired
     private UserService service;
+
+    @Operation(
+            summary = "Registrar novo usuário",
+            description = "Endpoint para registrar um novo usuário no sistema. Requer o envio de dados válidos, como nome, e-mail e senha. Retorna uma mensagem de sucesso ao finalizar o registro.",
+            tags = {"Usuários"}
+    )
 
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody @Valid UserDTORequest userDTO){

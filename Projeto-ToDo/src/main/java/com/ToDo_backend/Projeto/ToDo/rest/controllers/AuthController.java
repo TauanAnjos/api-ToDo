@@ -7,6 +7,7 @@ package com.ToDo_backend.Projeto.ToDo.rest.controllers;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.AuthDTO;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.TokenDTO;
 import com.ToDo_backend.Projeto.ToDo.services.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,11 @@ public class AuthController extends BaseController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Operation(
+            summary = "Autenticar usuário",
+            description = "Endpoint para autenticar um usuário no sistema. Requer o envio de e-mail e senha válidos, retornando um token JWT em caso de sucesso.",
+            tags = {"Autenticação"}
+    )
 
     @PostMapping("/login")
     public TokenDTO login(@RequestBody AuthDTO authDto) {
