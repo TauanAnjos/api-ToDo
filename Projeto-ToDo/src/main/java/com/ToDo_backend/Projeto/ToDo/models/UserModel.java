@@ -1,6 +1,7 @@
 package com.ToDo_backend.Projeto.ToDo.models;
 
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTORequest;
+import com.ToDo_backend.Projeto.ToDo.rest.dtos.UserDTOResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -121,5 +122,8 @@ public class UserModel implements UserDetails {
 
     public UserDTORequest toDTO(){
        return new UserDTORequest(this.firstName, this.lastName, this.email, this.password);
+    }
+    public UserDTOResponse toDTOResponse(){
+        return new UserDTOResponse(this.firstName, this.lastName, this.email);
     }
 }
