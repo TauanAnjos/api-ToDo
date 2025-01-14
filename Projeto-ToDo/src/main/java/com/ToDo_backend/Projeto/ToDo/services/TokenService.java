@@ -13,7 +13,7 @@ public class TokenService {
     private final Algorithm algorithm;
 
     public TokenService(@Value("${api.security.token.secret}") String secret) {
-        this.algorithm = Algorithm.HMAC256(secret);
+        this.algorithm = Algorithm.HMAC256(secret); //Algoritimo para criptografar, ele cria Hash 256 com a secret.
     }
 
     public String generateToken(String email) {

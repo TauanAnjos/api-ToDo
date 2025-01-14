@@ -6,6 +6,7 @@ package com.ToDo_backend.Projeto.ToDo.rest.controllers;
 
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.AuthDTO;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.TokenDTO;
+import com.ToDo_backend.Projeto.ToDo.services.AuthService;
 import com.ToDo_backend.Projeto.ToDo.services.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController extends BaseController {
 
     @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthService authService;
 
     @Operation(
             summary = "Autenticar usuário",
@@ -35,13 +33,6 @@ public class AuthController extends BaseController {
 
     @PostMapping("/login")
     public TokenDTO login(@RequestBody AuthDTO authDto) {
-        UsernamePasswordAuthenticationToken usernamePassword =
-                new UsernamePasswordAuthenticationToken(authDto.email(), authDto.password());
-
-        Authentication auth = authenticationManager.authenticate(usernamePassword);
-
-        String token = tokenService.generateToken(authDto.email());
-
-        return new TokenDTO(token);
+        return new TokenDTO(authService.authentication(authDto.email(), authDto.password()));
     }
 }

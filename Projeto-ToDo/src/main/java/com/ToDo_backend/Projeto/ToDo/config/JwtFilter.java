@@ -49,12 +49,12 @@ public class JwtFilter extends OncePerRequestFilter {
             // (4) se o token for válido (não houve exceção), encontramos a pessoa associada
            // UserDetails userDetails = userService.loadUserByUsername(subject);
 
-            // (5) informamos o Spring Security que a pessoa está autenticada
+            // (5) informamos o Spring Security quem é a pessoa que está autenticada(Estou criando a pessoa autenticada)
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userModel, null, userModel.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            HttpSession session = request.getSession();
-            session.setAttribute("userModel", userModel);
+            SecurityContextHolder.getContext().setAuthentication(authentication); // setando no contexto quem é a pessoa
+            HttpSession session = request.getSession(); //Aqui é a sessão atual(tudo que vem na request, o body)
+            session.setAttribute("userModel", userModel); //setando o usuário que está fazendo essa requisição
         }
 
         // (6) continuamos com a cadeia de filtros de qualquer forma
