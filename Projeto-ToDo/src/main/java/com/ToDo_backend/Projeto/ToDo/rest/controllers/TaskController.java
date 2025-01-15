@@ -5,8 +5,12 @@ import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTORequest;
 import com.ToDo_backend.Projeto.ToDo.rest.dtos.TaskDTOResponse;
 import com.ToDo_backend.Projeto.ToDo.services.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +41,12 @@ public class TaskController extends BaseController{
             tags = {"Tarefas"}
     )
     @GetMapping
-    public ResponseEntity<List<TaskDTOResponse>> getAllTasks(HttpServletRequest request){
+    public ResponseEntity<Page<TaskDTOResponse>> getAllTasks(HttpServletRequest request, @Parameter(description = "Número da página começa em '1' ") @RequestParam(defaultValue = "1")int page,@Parameter(description = "Quantidade de item por página") @RequestParam(defaultValue = "10")int size){
         UUID uuid = getUserModelSession(request).getUser_id();
-        return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasks(uuid));
+        // Ajusta o número da página para que a 1 seja considerada a página 0
+        Pageable pageable = PageRequest.of(page > 0 ? page - 1: 0, size);
+        Page<TaskDTOResponse> taskPage = taskService.getAllTasks(uuid, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(taskPage);
     }
     @Operation(
             summary = "Consultar tarefa por ID",
